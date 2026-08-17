@@ -1,0 +1,41 @@
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> result;
+        string current;
+
+        backtrack(0, 0, n, current, result);
+
+        return result;
+    }
+
+private:
+    void backtrack(int open, int close, int n,
+                   string& current,
+                   vector<string>& result) {
+
+        // A complete valid combination is formed
+        if (current.length() == 2 * n) {
+            result.push_back(current);
+            return;
+        }
+
+        // Add an opening bracket if available
+        if (open < n) {
+            current.push_back('(');
+
+            backtrack(open + 1, close, n, current, result);
+
+            current.pop_back();
+        }
+
+        // Add a closing bracket only when it is valid
+        if (close < open) {
+            current.push_back(')');
+
+            backtrack(open, close + 1, n, current, result);
+
+            current.pop_back();
+        }
+    }
+};
