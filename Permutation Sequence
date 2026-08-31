@@ -1,0 +1,45 @@
+class Solution {
+public:
+    string getPermutation(int n, int k) {
+
+        // Store numbers 1 to n
+        vector<int> nums;
+
+        for (int i = 1; i <= n; i++) {
+            nums.push_back(i);
+        }
+
+        // Factorials
+        int fact = 1;
+        for (int i = 1; i < n; i++) {
+            fact *= i;
+        }
+
+        // k is 0-indexed
+        k--;
+
+        string ans = "";
+
+        while (!nums.empty()) {
+
+            // Find the index of the required number
+            int index = k / fact;
+
+            ans += to_string(nums[index]);
+
+            // Remove that number
+            nums.erase(nums.begin() + index);
+
+            if (nums.empty())
+                break;
+
+            // Update k
+            k = k % fact;
+
+            // Update factorial
+            fact /= nums.size();
+        }
+
+        return ans;
+    }
+};
