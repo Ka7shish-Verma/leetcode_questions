@@ -1,0 +1,79 @@
+class Solution {
+public:
+    vector<string> fullJustify(vector<string>& words, int maxWidth) {
+        vector<string> ans;
+        int n = words.size();
+        int i = 0;
+
+        while (i < n) {
+            int j = i;
+            int totalLength = 0;
+
+            // Find the words that can fit in this line
+            while (j < n) {
+                if (totalLength + words[j].length() + (j - i) > maxWidth)
+                    break;
+
+                totalLength += words[j].length();
+                j++;
+            }
+
+            int wordCount = j - i;
+            int spaces = maxWidth - totalLength;
+
+            string line = "";
+
+            // Last line
+            if (j == n) {
+                for (int k = i; k < j; k++) {
+                    if (k > i)
+                        line += " ";
+
+                    line += words[k];
+                }
+
+                // Add spaces at the end
+                while (line.length() < maxWidth)
+                    line += " ";
+            }
+
+            // Only one word in the line
+            else if (wordCount == 1) {
+                line = words[i];
+
+                while (line.length() < maxWidth)
+                    line += " ";
+            }
+
+            // Fully justified line
+            else {
+                int gaps = wordCount - 1;
+
+                int spaceEach = spaces / gaps;
+                int extra = spaces % gaps;
+
+                for (int k = i; k < j; k++) {
+                    line += words[k];
+
+                    if (k < j - 1) {
+                        // Left gaps get the extra spaces
+                        int count = spaceEach;
+
+                        if (k - i < extra)
+                            count++;
+
+                        for (int x = 0; x < count; x++)
+                            line += " ";
+                    }
+                }
+            }
+
+            ans.push_back(line);
+
+            // Move to next line
+            i = j;
+        }
+
+        return ans;
+    }
+};
