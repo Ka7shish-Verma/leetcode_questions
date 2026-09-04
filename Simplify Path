@@ -1,0 +1,48 @@
+class Solution {
+public:
+    string simplifyPath(string path) {
+        stack<string> st;
+
+        string current = "";
+
+        for (int i = 0; i <= path.length(); i++) {
+
+            // Process when we reach '/' or end of string
+            if (i == path.length() || path[i] == '/') {
+
+                if (current == "" || current == ".") {
+                    // Ignore empty parts and "."
+                }
+                else if (current == "..") {
+                    // Go to parent directory
+                    if (!st.empty()) {
+                        st.pop();
+                    }
+                }
+                else {
+                    // Normal directory name
+                    st.push(current);
+                }
+
+                current = "";
+            }
+            else {
+                current += path[i];
+            }
+        }
+
+        // Build the final path
+        string result = "";
+
+        while (!st.empty()) {
+            result = "/" + st.top() + result;
+            st.pop();
+        }
+
+        // If nothing is left, we are at root
+        if (result == "")
+            return "/";
+
+        return result;
+    }
+};
