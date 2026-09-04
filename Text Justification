@@ -1,0 +1,74 @@
+class Solution {
+public:
+    vector<string> fullJustify(vector<string>& words, int maxWidth) {
+        vector<string> result;
+        int n = words.size();
+        int i = 0;
+
+        while (i < n) {
+            int j = i;
+            int lineLength = 0;
+
+            // Find how many words can fit in this line
+            while (j < n) {
+                int newLength = lineLength + words[j].length();
+
+                // Add at least one space between words
+                if (j > i)
+                    newLength++;
+
+                if (newLength > maxWidth)
+                    break;
+
+                lineLength += words[j].length();
+                j++;
+            }
+
+            int wordCount = j - i;
+            int totalSpaces = maxWidth - lineLength;
+
+            string line;
+
+            // Last line or line with only one word
+            if (j == n || wordCount == 1) {
+                for (int k = i; k < j; k++) {
+                    if (k > i)
+                        line += " ";
+
+                    line += words[k];
+                }
+
+                // Add remaining spaces at the end
+                line += string(maxWidth - line.length(), ' ');
+            }
+            else {
+                // Fully justify the line
+                int gaps = wordCount - 1;
+
+                // Minimum spaces for each gap
+                int spacesEach = totalSpaces / gaps;
+
+                // Extra spaces go to left gaps
+                int extraSpaces = totalSpaces % gaps;
+
+                for (int k = i; k < j; k++) {
+                    line += words[k];
+
+                    if (k < j - 1) {
+                        int spaces = spacesEach;
+
+                        if (k - i < extraSpaces)
+                            spaces++;
+
+                        line += string(spaces, ' ');
+                    }
+                }
+            }
+
+            result.push_back(line);
+            i = j;
+        }
+
+        return result;
+    }
+};
