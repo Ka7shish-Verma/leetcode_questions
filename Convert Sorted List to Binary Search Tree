@@ -1,0 +1,35 @@
+class Solution {
+public:
+    TreeNode* sortedListToBST(ListNode* head) {
+        if (head == nullptr)
+            return nullptr;
+
+        if (head->next == nullptr)
+            return new TreeNode(head->val);
+
+        // Find middle node
+        ListNode* slow = head;
+        ListNode* fast = head;
+        ListNode* prev = nullptr;
+
+        while (fast != nullptr && fast->next != nullptr) {
+            prev = slow;
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+        // Break the list at middle
+        prev->next = nullptr;
+
+        // Middle becomes root
+        TreeNode* root = new TreeNode(slow->val);
+
+        // Left half -> left subtree
+        root->left = sortedListToBST(head);
+
+        // Right half -> right subtree
+        root->right = sortedListToBST(slow->next);
+
+        return root;
+    }
+};
