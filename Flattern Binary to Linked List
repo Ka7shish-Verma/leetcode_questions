@@ -1,0 +1,28 @@
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        if (root == nullptr)
+            return;
+
+        TreeNode* curr = root;
+
+        while (curr != nullptr) {
+            if (curr->left != nullptr) {
+                // Find the rightmost node of left subtree
+                TreeNode* temp = curr->left;
+
+                while (temp->right != nullptr)
+                    temp = temp->right;
+
+                // Connect right subtree after it
+                temp->right = curr->right;
+
+                // Move left subtree to right
+                curr->right = curr->left;
+                curr->left = nullptr;
+            }
+
+            curr = curr->right;
+        }
+    }
+};
